@@ -1,6 +1,6 @@
 # Pragmi-Cognitive-Loop_v1
 
-> A modular PyTorch implementation of the ten brain-accurate feedback loops described in the **PRAGMI Complete Mathematical Corpus (April 24, 2026)**. Each file maps to a named anatomical structure and a specific section of the corpus. Each architectural decision is cited to a peer-reviewed paper. Every parameter that is not a biological quantity is explicitly labeled as a training artifact or engineering approximation.
+> A modular PyTorch implementation of the ten brain-accurate feedback loops described in the **PRAGMI Complete Mathematical Corpus (April 30, 2026)**. Each file maps to a named anatomical structure and a specific section of the corpus. Each architectural decision is cited to a peer-reviewed paper. Every parameter that is not a biological quantity is explicitly labeled as a training artifact or engineering approximation.
 
 ```
 "You cannot build something that plans for tomorrow and simultaneously
@@ -52,6 +52,8 @@ The intended audience is researchers and engineers who want to study individual 
 This is not a finished AGI system. It is not a chatbot. It is not a reinforcement learning agent with a polished training script that runs on benchmark environments. It is the **substrate layer** of a larger architecture, the part that implements the brain-accurate feedback loops on top of which higher-level reasoning, language, and action selection are built in companion repositories.
 
 It is also not a mean-field rate model dressed up with biological labels. Each module respects the specific quantitative findings of its grounding papers. The thalamic gate is a four-stage cascade because Gu, Lam, Wimmer, Halassa, Murray (2021) report that disinhibitory geometry produces a 6 to 7x amplification that a single sigmoid cannot reproduce. The basal ganglia selector uses local disinhibition rather than global softmax because Mink (1996) is unambiguous on that point. CA2 is a sibling to CA3 rather than a downstream stage because the Mankin et al. (2015) drift data and the Lee et al. (2010) RGS14-LTP suppression data both demand it. Where the corpus and the experimental literature disagree, the literature wins.
+
+This repository does not contain lemma acquisition. The speech-pathway machinery, including the lemma stratum, the tied lexical substrate, the teaching-frame recognizer, the confirmation detector, and the .soul checkpoint protocol, lives in the **Timmy_Neuron** repository alongside the v2 Chat interface. The boundary between the cognitive loop and the speech pathway is the lemma in mid-MTG; everything substrate-side of that boundary is here, and everything language-side of it is in Timmy_Neuron.
 
 ---
 
@@ -683,10 +685,11 @@ Mismatches manifest as `RuntimeError: shape mismatch` at the offending `nn.Linea
 
 ## Where this fits in the larger Genesis stack
 
-`Pragmi-Cognitive-Loop_v1` is the **substrate** layer of the Genesis architecture. Above it sit two other repositories:
+`Pragmi-Cognitive-Loop_v1` is the **substrate** layer of the Genesis architecture. Above it sit three other repositories:
 
-- **CognitiveKernel** (separate repo) — the persistent neuromorphic OS that wraps this loop in the dual-stream Isocortex / Allocortex / Astrocytic regulator framing, adds the n-dimensional state-space neuron substrate (P-SpikeSSM with HiPPO initialization), and provides the full-state serialization protocol that lets the system be powered off and resumed with 100% dynamical fidelity.
-- **TimmyArray** (separate repo) — the cortical column ensemble (Timmy Prime + 5 specialists) that provides the spiking language interface between an external LLM narrator and this kernel.
+- **CognitiveKernel** (separate repo). The persistent neuromorphic OS that wraps this loop in the dual-stream Isocortex / Allocortex / Astrocytic regulator framing, adds the n-dimensional state-space neuron substrate (P-SpikeSSM with HiPPO initialization), and provides the full-state serialization protocol that lets the system be powered off and resumed with 100% dynamical fidelity. The canonical AstrocyticRegulator in CognitiveKernel is the per-neuron BCM v3, which produces a per-neuron `eta_modifier` tensor of shape `(num_neurons,)` rather than a scalar; the metabolic state round-trips through the kernel's `get_memory_state` / `load_memory_state` interface.
+- **Timmy_Neuron** (separate repo). The speech-pathway substrate anchored at Broca's area, with the tied lexical matrices (`W_C_to_L`, `W_L_to_P`), the lemma acquisition module, mid-MTG and Wernicke regions, the teaching-frame recognizer, the confirmation detector, the trust gate that distinguishes trusted from untrusted speakers, and the `.soul` three-layer cold/warm/hot checkpoint protocol. The boundary with this repository is the lemma in mid-MTG.
+- **TimmyArray** (separate repo). The cortical column ensemble (Timmy Prime + 5 specialists) that provides the spiking language interface between an external LLM narrator and this kernel.
 
 The architectural commitment, articulated in Appendix C of the corpus (the **Reconamics Continuity Frame**), is that **experiential continuity does not live in any swappable module**. Reasoning modules (LLMs, planners) consume reconstructed episodes from the kernel but never own them. The kernel and its codebook are the only things that get serialized between sessions. If you can delete the reasoning module and restart with a different one and the system resumes with its accumulated experiential structure intact, the architecture is honoring the continuity frame.
 
