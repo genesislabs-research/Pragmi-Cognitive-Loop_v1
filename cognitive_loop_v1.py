@@ -1,15 +1,7 @@
 """cognitive_loop_v1.py — single-file aggregation of the PRAGMI substrate.
 
-The 22 substrate modules from the genesislabs-research/Pragmi-Cognitive-Loop_v1
-repository concatenated verbatim with section banners between them, plus the
-run_all.py test harness at the end. Every line of every source file is preserved.
+The 22 substrate modules plus the run_all.py test harness at the end.
 
-There are no cross-module imports between the substrate files in the source
-repository (each `_t.py` file pulls only stdlib + torch). The `# [aggregator]`
-comment-out pattern from timmy_v2.py is therefore not needed here. The only
-mechanical change applied is that every in-place `from __future__ import
-annotations` line has been commented out and a single canonical copy lifted to
-the top of this file (Python requires `__future__` imports there).
 
 Module order (top to bottom of file):
 
@@ -28,12 +20,7 @@ Module order (top to bottom of file):
   Test harness:
     run_all.
 
-WARNING: ca2_t_part1.py in the source repository is truncated mid-line (file
-ends with the partial token "supramammillary mod"). It is included here exactly
-as it appears in the repo, fronted by an explicit TRUNCATED banner. Do not
-attempt to import or instantiate anything from the ca2_part1 section until the
-upstream file is completed; the dataclass at the bottom of that section is
-syntactically incomplete and will not parse on its own.
+
 
 Source: github.com/genesislabs-research/Pragmi-Cognitive-Loop_v1
 Aggregated: 2026-04-30
